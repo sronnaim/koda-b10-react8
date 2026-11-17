@@ -3,4 +3,13 @@
 
 @theme {
   --font-sans: 'Hanken Grotesk', sans-serif;
+
+  --color-primary: var(--color-rose-500);
+  --color-on-primary: var(--color-rose-50);
+
+  --color-surface: var(--color-zinc-50);
+  --color-surface-container: var(--color-zinc-100);
+  --color-on-surface: var(--color--zinc-800);
+  --color-on-surface-high: var(--color--zinc-950);
+  --color-on-surface-low: var(--color--zinc-500);
 }
