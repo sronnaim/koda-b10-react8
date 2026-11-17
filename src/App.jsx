@@ -15,6 +15,8 @@ const router = createBrowserRouter([{
 function App() {
   const [profile, setProfile] = useState(null)
 
+
+
   return (
     <AuthContext.Provider value={[profile, setProfile]}>
       <RouterProvider router={router} />

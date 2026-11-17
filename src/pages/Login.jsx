@@ -1,12 +1,48 @@
+import { useContext, useEffect } from 'react'
 import { LuLock, LuMail } from 'react-icons/lu'
+import AuthContext from '../contexes/AuthContext'
+import { NavLink, useNavigate } from 'react-router'
+
+function login(email, password) {
+  if (email !== 'test@mail.to')
+    return null
+
+  if (password !== '12345678')
+    return null
+
+  return {
+    email,
+    fullName: 'admin'
+  }
+}
 
 function Login() {
+  const [profile, setProfile] = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  function handleLogin(e) {
+    e.preventDefault()
+    const fd = new FormData(e.currentTarget)
+
+    const user = login(fd.get('email'), fd.get('password'))
+
+    if (!user)
+      return
+
+    setProfile(user)
+  }
+
+  useEffect(() => {
+    if (profile)
+      navigate('/', { state: { from: '/login' } })
+  }, [profile, navigate])
+
   return (
-    <main className="flex items-center justify-center min-h-screen">
-      <div className="mx-auto bg-green-500 p-4 rounded-2xl *:text-center bg-surface shadow-sm shadow-black/30 text-sm">
-        <h1>Sign in with Email</h1>
-        <p>Make a new doc to bring your team together</p>
-        <form className='flex flex-col gap-4 mt-4'>
+    <main className="flex flex-col items-center justify-center min-h-screen">
+      <div className="mx-auto p-4 rounded-2xl *:text-center bg-surface shadow-sm shadow-black/30 text-sm">
+        <h1 className='font-semibold text-xl'>Sign in with Email</h1>
+        <p className='text-sm'>Make a new doc to bring your team together</p>
+        <form onSubmit={handleLogin} className='flex flex-col gap-4 mt-4 max-w-[50%'>
           <label>
             <span className="sr-only">Email</span>
             <span className="bg-surface-container flex gap-2 items-center p-2 rounded-xl">
@@ -28,6 +64,7 @@ function Login() {
           </div>
         </form>
       </div>
+      <NavLink to={'/'} className="text-xs py-2">To Homepage, probably couldn't while logged out</NavLink>
     </main>
   )
 }
