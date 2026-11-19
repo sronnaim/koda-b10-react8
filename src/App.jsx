@@ -1,8 +1,7 @@
-import { useState } from "react"
-import AuthContext from "./contexes/AuthContext"
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import Home from "./pages/Home"
 import Login from "./pages/Login"
+import AuthProvider from "./contexes/AuthProvider"
 
 const router = createBrowserRouter([{
   path: '/',
@@ -13,14 +12,10 @@ const router = createBrowserRouter([{
 }])
 
 function App() {
-  const [profile, setProfile] = useState(null)
-
-
-
   return (
-    <AuthContext.Provider value={[profile, setProfile]}>
+    <AuthProvider>
       <RouterProvider router={router} />
-    </AuthContext.Provider>
+    </AuthProvider>
   )
 }
 

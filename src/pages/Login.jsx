@@ -17,7 +17,7 @@ function login(email, password) {
 }
 
 function Login() {
-  const [profile, setProfile] = useContext(AuthContext)
+  const [user, dispatch] = useContext(AuthContext)
   const navigate = useNavigate()
 
   function handleLogin(e) {
@@ -29,13 +29,16 @@ function Login() {
     if (!user)
       return
 
-    setProfile(user)
+    dispatch({
+      type: 'login',
+      payload: user
+    })
   }
 
   useEffect(() => {
-    if (profile)
+    if (user)
       navigate('/', { state: { from: '/login' } })
-  }, [profile, navigate])
+  }, [user, navigate])
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen">
