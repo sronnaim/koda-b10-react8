@@ -1,7 +1,9 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import Home from "./pages/Home"
 import Login from "./pages/Login"
-import AuthProvider from "./contexes/AuthProvider"
+import AuthProvider from "./contexes/Auth/AuthProvider"
+import UsersProvider from './contexes/Users/UsersProvider'
+import Profile from './pages/Profile'
 
 const router = createBrowserRouter([{
   path: '/',
@@ -9,13 +11,18 @@ const router = createBrowserRouter([{
 }, {
   path: 'login',
   Component: Login
+}, {
+  path: 'profile',
+  Component: Profile
 }])
 
 function App() {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <UsersProvider >
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </UsersProvider>
   )
 }
 

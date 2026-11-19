@@ -1,36 +1,21 @@
 import { useContext, useEffect } from "react"
-import AuthContext from "../contexes/AuthContext"
-import { NavLink, useNavigate } from 'react-router'
+import { Link, NavLink, useNavigate } from 'react-router'
+import authContext from "../contexes/Auth/authContext"
 
 function Home() {
-  const [user, dispatch] = useContext(AuthContext)
+  const [user] = useContext(authContext)
   const navigate = useNavigate()
 
   useEffect(() => {
     if (!user)
-      navigate('/login', { state: { from: '/' } })
+      navigate('/login')
   }, [user, navigate])
-
-  function handleSubmit(e) {
-    e.preventDefault()
-    const fd = new FormData(e.currentTarget)
-
-    dispatch({
-      type: 'update',
-      payload: Object.fromEntries(fd.entries())
-    })
-  }
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center">
-      {user && <h1 className="text-4xl font-semibold text-on-surface-low">Welcome back, <span className="text-on-surface-high">{user.fullName}</span></h1>}
-      {user && <form onSubmit={handleSubmit}>
-        <label>
-          Try changing your name
-          <input type="text" name="fullName" />
-        </label>
-      </form>}
-      <NavLink to={'/login'} className="text-xs py-2">To login page, probably couldn't while logged in</NavLink>
+      {user && <h1 className="text-4xl font-semibold text-on-surface-low">Welcome back, <span className="text-on-surface-high">{user.firstName}</span></h1>}
+      <Link to={'/profile'} className="text-xs">Edit your profile →</Link>
+      <NavLink to={'/login'} className="text-xs">To login page, probably couldn't while logged in</NavLink>
     </main>
   )
 }

@@ -1,43 +1,45 @@
 import { useContext, useEffect } from 'react'
-import { LuLock, LuMail } from 'react-icons/lu'
-import AuthContext from '../contexes/AuthContext'
+import { LuLock, LuUser } from 'react-icons/lu'
 import { NavLink, useNavigate } from 'react-router'
+import authContext from '../contexes/Auth/authContext'
+import { usersContext } from '../contexes/Users/usersContext'
 
-function login(email, password) {
-  if (email !== 'test@mail.to')
+function authenticate(username, password, users) {
+  const foundUser = users.find(user => user.username === username)
+
+  if (!foundUser)
     return null
 
-  if (password !== '12345678')
+  if (foundUser.password !== password)
     return null
 
-  return {
-    email,
-    fullName: 'admin'
-  }
+  return { username, email: foundUser.email, firstName: foundUser.firstName }
 }
 
 function Login() {
-  const [user, dispatch] = useContext(AuthContext)
+  const [user, dispatchUser] = useContext(authContext)
+  const [users] = useContext(usersContext)
+
   const navigate = useNavigate()
 
   function handleLogin(e) {
     e.preventDefault()
     const fd = new FormData(e.currentTarget)
 
-    const user = login(fd.get('email'), fd.get('password'))
+    const authenticatedUser = authenticate(fd.get('username'), fd.get('password'), users)
 
-    if (!user)
-      return
+    if (!authenticatedUser)
+      return window.alert('Invalid credentials')
 
-    dispatch({
-      type: 'login',
-      payload: user
-    })
+    dispatchUser({ action: 'login', payload: authenticatedUser })
+    console.log(authenticatedUser)
+
+    navigate('/')
   }
 
   useEffect(() => {
     if (user)
-      navigate('/', { state: { from: '/login' } })
+      navigate('/')
   }, [user, navigate])
 
   return (
@@ -47,10 +49,10 @@ function Login() {
         <p className='text-sm'>Make a new doc to bring your team together</p>
         <form onSubmit={handleLogin} className='flex flex-col gap-4 mt-4 max-w-[50%'>
           <label>
-            <span className="sr-only">Email</span>
+            <span className="sr-only">Username</span>
             <span className="bg-surface-container flex gap-2 items-center p-2 rounded-xl">
-              <LuMail />
-              <input type="email" name="email" autoComplete='email' className="w-full" />
+              <LuUser />
+              <input type="text" name="username" autoComplete='email' className="w-full" />
             </span>
           </label>
           <label>
